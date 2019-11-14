@@ -1,12 +1,14 @@
 import React, { Component } from "react";
-import { Text, View, Alert, ActivityIndicator,Image } from "react-native";
+import { Text, View, Alert, ActivityIndicator, Image, StyleSheet } from "react-native";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
-import MapView ,{ Marker }from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import { grey } from "ansi-colors";
+import marker from "../assets/location-pin.png";
+
 export default class SpotRegistration extends Component {
   constructor(props) {
-    let lat,lon;
+    let lat, lon;
     super(props);
     this.state = {
       mapRegion: {
@@ -52,7 +54,7 @@ export default class SpotRegistration extends Component {
     try {
       const location = await Location.getCurrentPositionAsync({
         timeout: 10000,
-        enableHighAccuracy:true
+        enableHighAccuracy: true
       });
 
       if (location) {
@@ -63,8 +65,8 @@ export default class SpotRegistration extends Component {
             latitudeDelta: 0.002,
             longitudeDelta: 0.0092
           },
-          markerCoordinates:{
-            latitude:location.coords.latitude,
+          markerCoordinates: {
+            latitude: location.coords.latitude,
             longitude: location.coords.longitude
           },
           fetching: true
@@ -80,26 +82,32 @@ export default class SpotRegistration extends Component {
       this.props.navigation.goBack();
     }
   }
-
+  
   render() {
     return (
-      <View style={{ height: "100%", width: "100%" }}>
+      <View style={{ height: "50%", width: "100%" }}>
         {this.state.fetching ? (
-          <MapView
-            style={{ flex:1 }}
+         <View style={{ flex: 1 }}>
+         <MapView style={{ flex: 1 }}
+            style={{ flex: 1 }}
             region={this.state.mapRegion}
+            onRegionChangeComplete={region => {
+              this.setState({
+                mapRegion: {
+                  latitude: region.latitude,
+                  longitude: region.longitude,
+                  latitudeDelta:region.latitudeDelta,
+                  longitudeDelta:region.longitudeDelta
+                }
+              });
+            console.log(region)}}
             toolbarEnabled={true}
-          >
-            <Marker
-              draggable
-              title="you are here"
-              coordinate={this.state.markerCoordinates}
-              onDragEnd={e => this.setState({ markerCoordinates: e.nativeEvent.coordinate })}
-            
-            >
-            {/* <Image source={require('../assets/location-pin.png')} style={{height: 50, width:50 }} /> */}
-            </Marker>
-          </MapView>
+          />
+            <View style={styles.markerFixed}>
+          <Image style={styles.marker} source={marker} />
+        </View>
+        </View>
+          
         ) : (
           <View
             style={{
@@ -119,3 +127,15 @@ export default class SpotRegistration extends Component {
 SpotRegistration.navigationOptions = {
   headerTitle: "Pick Location"
 };
+const styles = StyleSheet.create({
+  markerFixed: {
+    left: '50%',
+    marginLeft: -24,
+    marginTop: -48,
+    position: 'absolute',
+    top: '50%'
+  },
+  marker: {
+    height: 37,
+    width: 37
+  }})
