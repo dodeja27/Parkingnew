@@ -9,6 +9,9 @@ import {
 import Signin from "../components/Signin.component";
 import Signup from "../components/Signup.component";
 export default class Home extends React.Component {
+  static navigationOptions = {
+    header:null
+  }
   constructor(props) {
     super(props);
     // console.log(props);

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import { StyleSheet, Text, View, Button, TextInput, AsyncStorage } from "react-native";
 import axios from "axios";
 export default class Signin extends Component {
   constructor() {
@@ -16,19 +16,18 @@ export default class Signin extends Component {
     };
     axios
       .post("http://192.168.43.23:2727/users/auth", credentials)
-      .then(res => {console.log(res.data[0])
+      .then(async (res) => {
+        console.log(res.data[0]);
         if (res.data[0]) {
           // console.log("great going");
-          this.props.nav.navigate({ routeName: "dashboard" });
-          
-        }
-        else{
+          await AsyncStorage.setItem('userToken', '1');
+          this.props.nav.navigate({ routeName: "Dashboard" });
+        } else {
           this.setState({
             wrongcredentials: "Invalid email or password. please try again"
           });
           console.log("incorrect details try again");
         }
-      
       })
       .catch(function(error) {
         console.log(error);
@@ -62,7 +61,8 @@ export default class Signin extends Component {
           onChangeText={text => this.setState({ email: text })}
         />
         <Text style={{ padding: 10 }}>password</Text>
-        <TextInput secureTextEntry={true}
+        <TextInput
+          secureTextEntry={true}
           style={style.inputcontainer}
           defaultValue={this.state.password}
           onChangeText={text => this.setState({ password: text })}
