@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, Alert, ActivityIndicator, Image, StyleSheet } from "react-native";
+import { Text, View, Alert, ActivityIndicator, Image, StyleSheet ,TextInput,KeyboardAvoidingView,Button} from "react-native";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import MapView, { Marker } from "react-native-maps";
@@ -85,9 +85,10 @@ export default class SpotRegistration extends Component {
   
   render() {
     return (
-      <View style={{ height: "50%", width: "100%" }}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+      <View style={{ height: "100%", width: "100%" , justifyContent: "space-evenly"}}>
         {this.state.fetching ? (
-         <View style={{ flex: 1 }}>
+         <View style={{ flex: 2 ,borderWidth:1}}>
          <MapView style={{ flex: 1 }}
             style={{ flex: 1 }}
             region={this.state.mapRegion}
@@ -111,7 +112,7 @@ export default class SpotRegistration extends Component {
         ) : (
           <View
             style={{
-              height: "50%",
+              height: "100%",
               width: "100%",
               justifyContent: "center",
               alignItems: "center"
@@ -120,7 +121,19 @@ export default class SpotRegistration extends Component {
             <ActivityIndicator size="large" color={grey} />
           </View>
         )}
+        <View style={styles.container}>
+        <View style={{marginHorizontal:20,marginVertical:25}}>
+        <Text style={{marginBottom:3}}>Address</Text>
+        <TextInput style={styles.inputcontainer}
+         multiline = {true}
+         numberOfLines = {2}/>        
       </View>
+      </View>
+      <View style={styles.container} >
+          <Button title="Submit" color="black" onPress={this.handlePress} />
+        </View>
+      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -135,7 +148,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '50%'
   },
+  container: {
+    padding: 10,
+    flex:1,
+    alignContent: "center"
+  },
+  inputcontainer: {
+    borderColor: "gray",
+    borderBottomWidth: 1
+  },
   marker: {
     height: 37,
     width: 37
-  }})
+  ,}})
