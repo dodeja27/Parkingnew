@@ -20,7 +20,11 @@ export default class Signin extends Component {
         console.log(res.data[0]);
         if (res.data[0]) {
           // console.log("great going");
-          await AsyncStorage.setItem('userToken', '1');
+          const details = {
+            name: res.data[0].name,
+            contact : res.data[0].contact
+          };
+          await AsyncStorage.setItem('details', JSON.stringify(details));
           this.props.nav.navigate({ routeName: "Dashboard" });
         } else {
           this.setState({

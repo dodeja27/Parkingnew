@@ -1,5 +1,17 @@
 import React, { Component } from "react";
-import { Text, View, Alert, ActivityIndicator, Image, StyleSheet ,TextInput,KeyboardAvoidingView,Button} from "react-native";
+import axios from "axios";
+import {
+  Text,
+  View,
+  Alert,
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  TextInput,
+  KeyboardAvoidingView,
+  Button,
+  AsyncStorage
+} from "react-native";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import MapView, { Marker } from "react-native-maps";
@@ -8,7 +20,6 @@ import marker from "../assets/location-pin.png";
 
 export default class SpotRegistration extends Component {
   constructor(props) {
-    let lat, lon;
     super(props);
     this.state = {
       mapRegion: {
@@ -23,7 +34,7 @@ export default class SpotRegistration extends Component {
       },
       fetching: false
     };
-    // console.log(props);
+    this.handlePress = this.handlePress.bind(this);
     this.verifyPermissions()
       .then(data => {
         if (data === false) {
@@ -82,57 +93,97 @@ export default class SpotRegistration extends Component {
       this.props.navigation.goBack();
     }
   }
-  
+  handlePress = async () => {
+    let userToken = await AsyncStorage.getItem("details");
+    userToken=JSON.parse(userToken);
+    // console.log(userToken);
+    const spotinformation = {
+      name:userToken.name,
+      contact:userToken.contact,
+      address:this.state.address,
+      latitude:this.state.mapRegion.latitude,
+      longitude:this.state.mapRegion.longitude
+    }
+    console.log(spotinformation);
+    axios
+      .post("http://192.168.43.23:2727/spots/add", spotinformation)
+      .then((res) => {
+        if(res.status=="200"){
+          // console.log(res.status);
+          Alert.alert(
+            "Spot added",
+        "parking spot successfully added",
+        [{ text: "Okay" }]
+          );
+          this.props.navigation.goBack();
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
+
   render() {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-      <View style={{ height: "100%", width: "100%" , justifyContent: "space-evenly"}}>
-        {this.state.fetching ? (
-         <View style={{ flex: 2 ,borderWidth:1}}>
-         <MapView style={{ flex: 1 }}
-            style={{ flex: 1 }}
-            region={this.state.mapRegion}
-            onRegionChangeComplete={region => {
-              this.setState({
-                mapRegion: {
-                  latitude: region.latitude,
-                  longitude: region.longitude,
-                  latitudeDelta:region.latitudeDelta,
-                  longitudeDelta:region.longitudeDelta
-                }
-              });
-            console.log(region)}}
-            toolbarEnabled={true}
-          />
-            <View style={styles.markerFixed}>
-          <Image style={styles.marker} source={marker} />
-        </View>
-        </View>
-          
-        ) : (
-          <View
-            style={{
-              height: "100%",
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            <ActivityIndicator size="large" color={grey} />
+        <View
+          style={{
+            height: "100%",
+            width: "100%",
+            justifyContent: "space-evenly"
+          }}
+        >
+          {this.state.fetching ? (
+            <View style={{ flex: 2, borderWidth: 1 }}>
+              <MapView
+                style={{ flex: 1 }}
+                style={{ flex: 1 }}
+                region={this.state.mapRegion}
+                onRegionChangeComplete={region => {
+                  this.setState({
+                    mapRegion: {
+                      latitude: region.latitude,
+                      longitude: region.longitude,
+                      latitudeDelta: region.latitudeDelta,
+                      longitudeDelta: region.longitudeDelta
+                    }
+                  });
+                  console.log(region);
+                }}
+                toolbarEnabled={true}
+              />
+              <View style={styles.markerFixed}>
+                <Image style={styles.marker} source={marker} />
+              </View>
+            </View>
+          ) : (
+            <View
+              style={{
+                height: "100%",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <ActivityIndicator size="large" color={grey} />
+            </View>
+          )}
+          <View style={styles.container}>
+            <View style={{ marginHorizontal: 20, marginVertical: 25 }}>
+              <Text style={{ marginBottom: 3 }}>Address</Text>
+              <TextInput
+                style={styles.inputcontainer}
+                multiline={true}
+                numberOfLines={2}
+                defaultValue={this.state.address}
+                onChangeText={text => this.setState({ address: text })}
+              />
+            </View>
           </View>
-        )}
-        <View style={styles.container}>
-        <View style={{marginHorizontal:20,marginVertical:25}}>
-        <Text style={{marginBottom:3}}>Address</Text>
-        <TextInput style={styles.inputcontainer}
-         multiline = {true}
-         numberOfLines = {2}/>        
-      </View>
-      </View>
-      <View style={styles.container} >
-          <Button title="Submit" color="black" onPress={this.handlePress} />
+          <View style={styles.container}>
+            <Button title="Submit" color="black" onPress={this.handlePress} />
+          </View>
         </View>
-      </View>
       </KeyboardAvoidingView>
     );
   }
@@ -142,15 +193,15 @@ SpotRegistration.navigationOptions = {
 };
 const styles = StyleSheet.create({
   markerFixed: {
-    left: '50%',
+    left: "50%",
     marginLeft: -24,
     marginTop: -48,
-    position: 'absolute',
-    top: '50%'
+    position: "absolute",
+    top: "50%"
   },
   container: {
     padding: 10,
-    flex:1,
+    flex: 1,
     alignContent: "center"
   },
   inputcontainer: {
@@ -160,4 +211,5 @@ const styles = StyleSheet.create({
   marker: {
     height: 37,
     width: 37
-  ,}})
+  }
+});
