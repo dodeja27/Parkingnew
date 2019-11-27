@@ -57,10 +57,6 @@ export default class SpotPicker extends Component {
         latitudeDelta: 1,
         longitudeDelta: 1
       },
-      markerCoordinates: {
-        latitude: 37.78,
-        longitude: -122.43
-      },
       fetching: false,
       locfetch: false,
       locations: []
