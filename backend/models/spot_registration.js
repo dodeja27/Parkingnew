@@ -4,8 +4,10 @@ const spot_registration_schema = new Schema({
     name: { type: String, require: true },
     contact: { type: String, require: true },
     address: { type: String, require: true },
-    latitude: { type: String, require: true },
-    longitude: { type: String, require: true }
+    latitude: { type: Number, require: true },
+    longitude: { type: Number, require: true }
+    // latitude: { type: String, require: true },
+    // longitude: { type: String, require: true }
 }, {
     timestamps: true,
 });

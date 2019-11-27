@@ -13,6 +13,7 @@ import Home from "../screens/home";
 import Dashboard from "../components/dashboard.component";
 import RegistrationForm from "../components/form.component";
 import SpotRegistration from "../components/SpotRegistration.component";
+import SpotPicker   from "../components/SpotPicker.component";
 // const Main = createStackNavigator({
 //   Home: {
 //     screen: Home,
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppStack = createStackNavigator({ Dashboard: Dashboard ,  spotregistration:SpotRegistration});
+const AppStack = createStackNavigator({ Dashboard: Dashboard ,  spotregistration:SpotRegistration, spotpicker:SpotPicker});
 const AuthStack = createStackNavigator({ Home: Home, registrationform:RegistrationForm });
 
 const AppContainer = createAppContainer(createSwitchNavigator(

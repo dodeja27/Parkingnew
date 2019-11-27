@@ -159,7 +159,7 @@ export default class SpotRegistration extends Component {
           ) : (
             <View
               style={{
-                height: "100%",
+                height: "50%",
                 width: "100%",
                 justifyContent: "center",
                 alignItems: "center"

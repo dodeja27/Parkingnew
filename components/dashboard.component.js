@@ -8,7 +8,9 @@ export default class Dashboard extends Component {
       <View style={style.container}>
         {/* <Text>dashboard content</Text> */}
         <View style={{ width: "50%" }}>
-          <Button large buttonStyle={style.Button} title="Pick a spot"/>
+          <Button large buttonStyle={style.Button} title="Pick a spot" onPress={() => {
+              this.props.navigation.navigate({ routeName: "spotpicker" });
+            }}/>
 
           <Button buttonStyle={style.Button} title="Register a spot" onPress={() => {
               this.props.navigation.navigate({ routeName: "spotregistration" });
