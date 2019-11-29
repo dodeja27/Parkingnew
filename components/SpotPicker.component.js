@@ -2,10 +2,14 @@ import React, { Component } from "react";
 import {
   Text,
   View,
+  
   Dimensions,
+  Linking,
   Animated,
   StyleSheet,
-  ActivityIndicator
+  Alert,
+  ActivityIndicator,
+  Platform
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { grey } from "ansi-colors";
@@ -16,6 +20,7 @@ const { height } = Dimensions.get("window");
 const { width } = Dimensions.get("window");
 
 import SlidingUpPanel from "rn-sliding-up-panel";
+
 
 const styles = StyleSheet.create({
   container: {
@@ -61,6 +66,7 @@ export default class SpotPicker extends Component {
       locfetch: false,
       locations: []
     };
+    this.handlePress = this.handlePress.bind(this);
     this.verifyPermissions()
       .then(data => {
         if (data === false) {
@@ -129,7 +135,27 @@ export default class SpotPicker extends Component {
       console.log("Error : ", error);
     }
   }
-
+  handlePress(){
+    
+    const concatStart = `${this.state.mapRegion.latitude},${this.state.mapRegion.longitude}`
+    const concatEnd = `${this.state.desLatitude},${this.state.desLongitude}`
+    const AllCoords = this.state.mapRegion.latitude !== null && this.state.desLatitude !== null
+    if (AllCoords) {
+      
+      
+      console.log('concatstart : ', concatStart  )
+      console.log('concatend : ', concatEnd  )
+    if(Platform.OS=='ios'){
+      Linking.openURL(`http://maps.apple.com/?saddr=${concatStart}&daddr=${concatEnd}`)
+    }
+    else{
+    
+      Linking.openURL(`https://maps.google.com/maps?daddr=${concatEnd}`)
+      // Linking.openURL(`google.navigation:q=${concatEnd}`)
+    }
+      
+  }
+  }
   static defaultProps = {
     draggableRange: { top: height * 0.2, bottom: 0 }
   };
@@ -175,8 +201,10 @@ export default class SpotPicker extends Component {
                   <Marker
                     key={index}
                     coordinate={coords}
-                    onPress={coordinate => {
-                      console.log(coordinate.nativeEvent.coordinate);
+                    onPress={(e) => { this.setState({ 
+                      desLatitude: e.nativeEvent.coordinate.latitude,
+                      desLongitude: e.nativeEvent.coordinate.longitude })
+                      console.log(e.nativeEvent.coordinate);
                       this._panel.show(210);
                     }}
                   />
@@ -203,7 +231,7 @@ export default class SpotPicker extends Component {
                     }}
                   >
                   {/* <Text>this is some text</Text> */}
-                    <Button large title="Get Directions" color="black" />
+                    <Button large title="Get Directions" color="black" onPress={this.handlePress} />
                   </Animated.View>
                 </View>
               </View>
