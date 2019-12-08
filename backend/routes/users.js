@@ -24,16 +24,34 @@ router.post("/add", function(req, res) {
   const email = req.body.email;
   const password = req.body.password;
   const contact = req.body.contact;
-
+  // console.log(req);
   const newuser = new user({
     name,
     email,
     password,
     contact
   });
-  newuser
-    .save()
-    .then(() => res.json("user added"))
+  // newuser
+  //   .save()
+  //   .then(() => res.json("user added"))
+  //   .catch(err => res.status(400).json("Error: " + err));
+
+  user
+    .find({
+      email: email
+    })
+    .then(users => {
+      // console.log(users[0]);
+      if (users[0]) {
+        res.json("user already exists");
+      } else {
+        newuser
+          .save()
+          .then(() => res.json("user added"))
+          .catch(err => res.status(400).json("Error: " + err));
+      }
+      // res.json(users);
+    })
     .catch(err => res.status(400).json("Error: " + err));
 });
 router.put("/update/:id", function(req, res) {

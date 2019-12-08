@@ -16,7 +16,7 @@ import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import MapView, { Marker } from "react-native-maps";
 import { grey } from "ansi-colors";
-import marker from "../assets/location-pin.png";
+import marker from "../assets/location-pin1.png";
 
 export default class SpotRegistration extends Component {
   constructor(props) {
@@ -64,7 +64,7 @@ export default class SpotRegistration extends Component {
   async location() {
     try {
       const location = await Location.getCurrentPositionAsync({
-        timeout: 10000,
+        timeout: 20000,
         enableHighAccuracy: true
       });
 
@@ -172,6 +172,7 @@ export default class SpotRegistration extends Component {
             <View style={{ marginHorizontal: 20, marginVertical: 25 }}>
               <Text style={{ marginBottom: 3 }}>Address</Text>
               <TextInput
+                placeholder="Please type the Address here..."
                 style={styles.inputcontainer}
                 multiline={true}
                 numberOfLines={2}
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   marker: {
-    height: 37,
-    width: 37
+    height: 42,
+    width: 42
   }
 });
