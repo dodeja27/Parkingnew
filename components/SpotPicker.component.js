@@ -121,7 +121,8 @@ export default class SpotPicker extends Component {
   }
   async componentDidMount() {
     try {
-      const respone = await fetch("http://192.168.43.23:2727/spots/");
+      // const respone = await fetch("http://192.168.43.23:2727/spots/");
+      const respone = await fetch("https://first-hrk-app.herokuapp.com/spots/");
       const myJson = await respone.json();
 
       this.setState({

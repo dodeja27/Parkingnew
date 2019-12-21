@@ -32,9 +32,11 @@ export default class SpotRegistration extends Component {
         latitude: 37.78,
         longitude: -122.43
       },
-      fetching: false
+      fetching: false,
+      address: ""
     };
     this.handlePress = this.handlePress.bind(this);
+    this.PlacePicker = this.PlacePicker.bind(this);
     this.verifyPermissions()
       .then(data => {
         if (data === false) {
@@ -95,26 +97,24 @@ export default class SpotRegistration extends Component {
   }
   handlePress = async () => {
     let userToken = await AsyncStorage.getItem("details");
-    userToken=JSON.parse(userToken);
+    userToken = JSON.parse(userToken);
     // console.log(userToken);
     const spotinformation = {
-      name:userToken.name,
-      contact:userToken.contact,
-      address:this.state.address,
-      latitude:this.state.mapRegion.latitude,
-      longitude:this.state.mapRegion.longitude
-    }
+      name: userToken.name,
+      contact: userToken.contact,
+      address: this.state.address,
+      latitude: this.state.mapRegion.latitude,
+      longitude: this.state.mapRegion.longitude
+    };
     console.log(spotinformation);
     axios
-      .post("http://192.168.43.23:2727/spots/add", spotinformation)
-      .then((res) => {
-        if(res.status=="200"){
+      .post("https://first-hrk-app.herokuapp.com/spots/add", spotinformation)
+      .then(res => {
+        if (res.status == "200") {
           // console.log(res.status);
-          Alert.alert(
-            "Spot added",
-        "parking spot successfully added",
-        [{ text: "Okay" }]
-          );
+          Alert.alert("Spot added", "parking spot successfully added", [
+            { text: "Okay" }
+          ]);
           this.props.navigation.goBack();
         }
       })
@@ -122,7 +122,25 @@ export default class SpotRegistration extends Component {
         console.log(error);
       });
   };
-
+  PlacePicker = async () => {
+    const lat = this.state.mapRegion.latitude;
+    const lon = this.state.mapRegion.longitude;
+    // console.log(lat+" "+lon);
+    const url = `https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?prox= ${lat}%2C${lon}%2C250&mode=retrieveAddresses&maxresults=1&gen=9&apiKey=`;
+    // console.log("in the placepicker function ");
+    try {
+      // const respone = await fetch("http://192.168.43.23:2727/spots/");
+      const respone = await fetch(url);
+      const myJson = await respone.json();
+      // console.log(myJson.Response.View[0].Result[0].Location.Address.Label)
+      const address = myJson.Response.View[0].Result[0].Location.Address.Label;
+      this.setState({
+        address: address
+      });
+    } catch (error) {
+      console.log("Error : ", error);
+    }
+  };
   render() {
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
@@ -149,6 +167,8 @@ export default class SpotRegistration extends Component {
                     }
                   });
                   console.log(region);
+                  console.log("here"); //call fuction here for placepicker
+                  this.PlacePicker();
                 }}
                 toolbarEnabled={true}
               />
@@ -170,7 +190,9 @@ export default class SpotRegistration extends Component {
           )}
           <View style={styles.container}>
             <View style={{ marginHorizontal: 20, marginVertical: 25 }}>
-              <Text style={{ marginBottom: 3 }}>Address</Text>
+              <Text style={{ marginBottom: 3, fontWeight: "bold" }}>
+                Address
+              </Text>
               <TextInput
                 placeholder="Please type the Address here..."
                 style={styles.inputcontainer}

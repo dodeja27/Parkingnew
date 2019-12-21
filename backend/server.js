@@ -22,4 +22,4 @@ const spotrouter = require("./routes/spots");
 app.use("/users", userrouter);
 app.use("/spots", spotrouter);
 
-app.listen(port, () => console.log("listening at 2727"));
+app.listen(port, () => console.log("listening at "+port));
