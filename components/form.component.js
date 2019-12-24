@@ -58,7 +58,7 @@ export default class RegistrationForm extends Component {
           // console.log("worked");
           // this.props.navigation.navigate({ routeName: "dashboard" });
           axios
-            .post("http://192.168.43.23:2727/users/add", details)
+            .post("https://first-hrk-app.herokuapp.com/users/add", details)
             .then(res => {
               console.log(res.data);
               if (res.data === "user already exists") {
@@ -169,7 +169,7 @@ export default class RegistrationForm extends Component {
                     </Text>
                   </View>
 
-                  <Button title="Submit" onPress={props.handleSubmit} />
+                  <Button title="Submit" color="black" onPress={props.handleSubmit} />
                 </View>
               </ScrollView>
             </KeyboardAvoidingView>

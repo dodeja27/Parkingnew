@@ -4,6 +4,7 @@ import {
   Text,
   View,
   ImageBackground,
+  Image,
   TouchableOpacity
 } from "react-native";
 import Signin from "../components/Signin.component";
@@ -18,11 +19,12 @@ export default class Home extends React.Component {
   }
   render() {
     return (
-      <ImageBackground
-        source={require("../Artboard1.png")}
-        style={style.imagestyle}
-      >
+      // <ImageBackground
+      //   source={require("../Artboard1.png")}
+      //   style={style.imagestyle}
+      // >
         <View style={style.container}>
+        <Text style={{fontSize:50, marginBottom:20}}>Park Here</Text>
           <Signin nav={this.props.navigation}/>
           <Signup nav={this.props.navigation} />
           {/* <View style={style.contentstyle}>
@@ -36,7 +38,7 @@ export default class Home extends React.Component {
             </TouchableOpacity>
           </View> */}
         </View>
-      </ImageBackground>
+      // </ImageBackground>
     );
   }
 }
@@ -47,6 +49,7 @@ const style = StyleSheet.create({
     width: "100%",
     height: "100%",
     justifyContent: "center",
+    backgroundColor:"white",
     alignItems: "center"
   },
   imagestyle: {

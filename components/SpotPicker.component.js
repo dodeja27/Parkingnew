@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { grey } from "ansi-colors";
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Button } from "react-native-elements";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
@@ -33,6 +34,8 @@ const styles = StyleSheet.create({
   },
   panel: {
     flex: 1,
+    // backgroundColor: "white",
+    width:"100%",
     backgroundColor: "white",
     position: "relative"
   },
@@ -40,6 +43,7 @@ const styles = StyleSheet.create({
     position: "relative",
     height: height * 0.2,
     backgroundColor: "#FFFFFF",
+    // backgroundColor: "red",
     justifyContent: "center",
 
     paddingLeft: width * 0.25
@@ -229,7 +233,16 @@ export default class SpotPicker extends Component {
                     }}
                   >
                     {/* <Text>this is some text</Text> */}
-                    <Button
+                    <Button 
+                    icon={
+                      <Icon
+                        name="directions"
+                        size={15}
+                        style={{paddingLeft:20}}
+                        color="white"
+                      />
+                    }
+                    iconRight
                       large
                       title="Get Directions"
                       color="black"
@@ -237,7 +250,7 @@ export default class SpotPicker extends Component {
                     />
                   </Animated.View>
                 </View>
-              </View>
+              </View> 
             </SlidingUpPanel>
           </View>
         ) : (
