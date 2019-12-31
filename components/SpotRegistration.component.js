@@ -126,7 +126,7 @@ export default class SpotRegistration extends Component {
     const lat = this.state.mapRegion.latitude;
     const lon = this.state.mapRegion.longitude;
     // console.log(lat+" "+lon);
-    const url = `https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?prox= ${lat}%2C${lon}%2C250&mode=retrieveAddresses&maxresults=1&gen=9&apiKey=`;
+    const url = `https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?prox= ${lat}%2C${lon}%2C250&mode=retrieveAddresses&maxresults=1&gen=9&apiKey=GDhxANB4_I_exwLeC0wgMoDbXjC0MXFbzvfRL76R0qM`;
     // console.log("in the placepicker function ");
     try {
       // const respone = await fetch("http://192.168.43.23:2727/spots/");

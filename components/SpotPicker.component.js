@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { grey } from "ansi-colors";
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from "react-native-vector-icons/FontAwesome5";
 import { Button } from "react-native-elements";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   panel: {
     flex: 1,
     // backgroundColor: "white",
-    width:"100%",
+    width: "100%",
     backgroundColor: "white",
     position: "relative"
   },
@@ -66,7 +66,8 @@ export default class SpotPicker extends Component {
       },
       fetching: false,
       locfetch: false,
-      locations: []
+      locations: [],
+      heremapslocations: []
     };
     this.handlePress = this.handlePress.bind(this);
     this.verifyPermissions()
@@ -127,13 +128,23 @@ export default class SpotPicker extends Component {
     try {
       // const respone = await fetch("http://192.168.43.23:2727/spots/");
       const respone = await fetch("https://first-hrk-app.herokuapp.com/spots/");
+      const heremaps = await fetch(
+        "https://places.ls.hereapi.com/places/v1/discover/search?at=24.5866%2C73.6975&q=parking&apiKey=GDhxANB4_I_exwLeC0wgMoDbXjC0MXFbzvfRL76R0qM	"
+      );
       const myJson = await respone.json();
+      const herejson = await heremaps.json();
 
+      // console.log(this.state.fetching);
+      const herelocations = herejson.results.items.filter(function(element) {
+        return element.position;
+      });
+      // console.log(herejson.results.items);
       this.setState({
         locations: myJson,
+        heremapslocations: herelocations,
         fetching: true
       });
-      console.log(this.state.fetching);
+      // console.log(this.state.heremapslocations);
     } catch (error) {
       console.log("Error : ", error);
     }
@@ -189,6 +200,18 @@ export default class SpotPicker extends Component {
             <MapView
               style={styles.mapStyle}
               region={this.state.mapRegion}
+              onRegionChangeComplete={region => {
+                this.setState({
+                  mapRegion: {
+                    latitude: region.latitude,
+                    longitude: region.longitude,
+                    latitudeDelta: region.latitudeDelta,
+                    longitudeDelta: region.longitudeDelta
+                  }
+                });
+                console.log(region)
+              }}
+              loadingEnabled={true}
               showsUserLocation
             >
               {this.state.locations.map((location, index) => {
@@ -199,8 +222,36 @@ export default class SpotPicker extends Component {
 
                 return (
                   <Marker
+                    title={location.address}
+                    description={'Private Parking'}
                     key={index}
                     coordinate={coords}
+                    onPress={e => {
+                      this.setState({
+                        desLatitude: e.nativeEvent.coordinate.latitude,
+                        desLongitude: e.nativeEvent.coordinate.longitude
+                      });
+                      console.log(e.nativeEvent.coordinate);
+                      this._panel.show(210);
+                    }}
+                  />
+                );
+              })}
+
+              {this.state.heremapslocations.map((hereloc, index) => {
+                const herecoords = {
+                  latitude: hereloc.position[0],
+                  longitude: hereloc.position[1]
+                };
+
+                return (
+                  <Marker
+                  
+                  title={hereloc.title}
+                  description={"Govt. Parking"}
+                    pinColor={'#008b8b'}
+                    key={index}
+                    coordinate={herecoords}
                     onPress={e => {
                       this.setState({
                         desLatitude: e.nativeEvent.coordinate.latitude,
@@ -233,16 +284,16 @@ export default class SpotPicker extends Component {
                     }}
                   >
                     {/* <Text>this is some text</Text> */}
-                    <Button 
-                    icon={
-                      <Icon
-                        name="directions"
-                        size={15}
-                        style={{paddingLeft:20}}
-                        color="white"
-                      />
-                    }
-                    iconRight
+                    <Button
+                      icon={
+                        <Icon
+                          name="directions"
+                          size={15}
+                          style={{ paddingLeft: 20 }}
+                          color="white"
+                        />
+                      }
+                      iconRight
                       large
                       title="Get Directions"
                       color="black"
@@ -250,7 +301,7 @@ export default class SpotPicker extends Component {
                     />
                   </Animated.View>
                 </View>
-              </View> 
+              </View>
             </SlidingUpPanel>
           </View>
         ) : (

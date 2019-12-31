@@ -1,17 +1,16 @@
 {
   "expo": {
-    "name": "AwsomeProject",
-    "slug": "AwesomeProject",
+    "name": "ParkHere",
+    "slug": "ParkHere",
     "privacy": "public",
     "sdkVersion": "34.0.0",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/parkingicon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -24,7 +23,26 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.nit.park_here",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
+    },
+    "android":{
+      "package": "com.nit.park_here",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/parking.png",
+        "backgroundColor": "#ffffff"
+
+      }
+    },
+    "permissions":["ACCESS_FINE_LOCATION"],
+    "config": {
+
+      "googleMaps": {
+        
+        "apiKey": "AIzaSyD234eTv_RLwJ92x8WdwyQo5jzPrM1EtBU"
+      }
     }
   }
 }
