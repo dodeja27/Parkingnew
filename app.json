@@ -34,14 +34,14 @@
         "foregroundImage": "./assets/parking.png",
         "backgroundColor": "#ffffff"
 
-      }
-    },
-    "permissions":["ACCESS_FINE_LOCATION"],
-    "config": {
-
-      "googleMaps": {
-        
-        "apiKey": "AIzaSyD234eTv_RLwJ92x8WdwyQo5jzPrM1EtBU"
+      },
+      "permissions":["ACCESS_FINE_LOCATION"],
+      "config": {
+  
+        "googleMaps": {
+          
+          "apiKey": ""
+        }
       }
     }
   }
