@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import {
@@ -7,36 +6,22 @@ import {
   AsyncStorage,
   StatusBar,
   StyleSheet,
-  View,
-} from 'react-native';
+  View
+} from "react-native";
 import Home from "../screens/home";
 import Dashboard from "../components/dashboard.component";
 import RegistrationForm from "../components/form.component";
 import SpotRegistration from "../components/SpotRegistration.component";
-import SpotPicker   from "../components/SpotPicker.component";
-// const Main = createStackNavigator({
-//   Home: {
-//     screen: Home,
-//     navigationOptions: {
-//       header: null
-//     }
-//   },
-//   // registraion: registraion,
-//   registrationform:RegistrationForm,
-//   dashboard:Dashboard,
-//   spotregistration:SpotRegistration
-  
-// });
+import SpotPicker from "../components/SpotPicker.component";
 
-// export default createAppContainer(Main);
 class AuthLoadingScreen extends Component {
   constructor() {
     super();
     this._bootstrapAsync();
   }
   _bootstrapAsync = async () => {
-    const userToken = await AsyncStorage.getItem('details');
-    this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+    const userToken = await AsyncStorage.getItem("details");
+    this.props.navigation.navigate(userToken ? "App" : "Auth");
   };
 
   render() {
@@ -51,23 +36,32 @@ class AuthLoadingScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    alignItems: "center",
+    justifyContent: "center"
+  }
 });
 
-const AppStack = createStackNavigator({ Dashboard: Dashboard ,  spotregistration:SpotRegistration, spotpicker:SpotPicker});
-const AuthStack = createStackNavigator({ Home: Home, registrationform:RegistrationForm });
+const AppStack = createStackNavigator({
+  Dashboard: Dashboard,
+  spotregistration: SpotRegistration,
+  spotpicker: SpotPicker
+});
+const AuthStack = createStackNavigator({
+  Home: Home,
+  registrationform: RegistrationForm
+});
 
-const AppContainer = createAppContainer(createSwitchNavigator(
-  {
-    AuthLoading: AuthLoadingScreen,
-    App: AppStack,
-    Auth: AuthStack,
-  },
-  {
-    initialRouteName: 'AuthLoading',
-  }
-));
+const AppContainer = createAppContainer(
+  createSwitchNavigator(
+    {
+      AuthLoading: AuthLoadingScreen,
+      App: AppStack,
+      Auth: AuthStack
+    },
+    {
+      initialRouteName: "AuthLoading"
+    }
+  )
+);
 
 export default AppContainer;

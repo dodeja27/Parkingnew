@@ -13,7 +13,7 @@ const IoniconsHeaderButton = props => (
 export default class Dashboard extends Component {
   constructor() {
     super();
-    this.handlePress = this.handlePress.bind(this);
+    // this.handlePress = this.handlePress.bind(this);
   }
   static navigationOptions = ({ navigation }) => {
     return {
@@ -32,9 +32,9 @@ export default class Dashboard extends Component {
     };
   };
 
-  handlePress = async () => {
-    console.log("pressed");
-  };
+  // handlePress = async () => {
+  //   console.log("pressed");
+  // };
   render() {
     return (
       <View style={style.container}>

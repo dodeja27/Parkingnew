@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {
-  Text,
   View,
   Dimensions,
   Linking,
@@ -36,13 +35,13 @@ const styles = StyleSheet.create({
     flex: 1,
     // backgroundColor: "white",
     width: "100%",
-    backgroundColor: "white",
+    // backgroundColor: "white",
     position: "relative"
   },
   panelHeader: {
     position: "relative",
     height: height * 0.2,
-    backgroundColor: "#FFFFFF",
+    // backgroundColor: "#FFFFFF",
     // backgroundColor: "red",
     justifyContent: "center",
 
@@ -51,12 +50,16 @@ const styles = StyleSheet.create({
   textHeader: {
     fontSize: 28,
     color: "#FFF"
+  },
+  Button: {
+    backgroundColor: "black",
+    paddingTop: 20,
+    paddingBottom: 20
   }
 });
-
 export default class SpotPicker extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       mapRegion: {
         latitude: 37.78,
@@ -73,14 +76,15 @@ export default class SpotPicker extends Component {
     this.verifyPermissions()
       .then(data => {
         if (data === false) {
-          console.log("you are going back");
+          this.props.navigation.goBack();
+          // console.log("you are going back");
         } else {
-          console.log("it is true");
+          // console.log("it is true");
+          this.location()
+            .then(data => console.log("working"))
+            .catch(err => console.log(err));
         }
       })
-      .catch(err => console.log(err));
-    this.location()
-      .then(data => console.log("working"))
       .catch(err => console.log(err));
   }
 
@@ -99,7 +103,7 @@ export default class SpotPicker extends Component {
   async location() {
     try {
       const location = await Location.getCurrentPositionAsync({
-        timeout: 10000,
+        timeout: 20000,
         enableHighAccuracy: true
       });
 
@@ -114,7 +118,7 @@ export default class SpotPicker extends Component {
           locfetch: true
         });
       }
-      console.log(location);
+      // console.log(location);
     } catch (err) {
       Alert.alert(
         "Could not fetch location!",
@@ -155,8 +159,8 @@ export default class SpotPicker extends Component {
     const AllCoords =
       this.state.mapRegion.latitude !== null && this.state.desLatitude !== null;
     if (AllCoords) {
-      console.log("concatstart : ", concatStart);
-      console.log("concatend : ", concatEnd);
+      // console.log("concatstart : ", concatStart);
+      // console.log("concatend : ", concatEnd);
       if (Platform.OS == "ios") {
         Linking.openURL(
           `http://maps.apple.com/?saddr=${concatStart}&daddr=${concatEnd}`
@@ -209,10 +213,10 @@ export default class SpotPicker extends Component {
                     longitudeDelta: region.longitudeDelta
                   }
                 });
-                console.log(region)
+                // console.log(region)
               }}
               loadingEnabled={true}
-              showsUserLocation
+              showsUserLocation={true}
             >
               {this.state.locations.map((location, index) => {
                 const coords = {
@@ -223,7 +227,7 @@ export default class SpotPicker extends Component {
                 return (
                   <Marker
                     title={location.address}
-                    description={'Private Parking'}
+                    description={"Private Parking"}
                     key={index}
                     coordinate={coords}
                     onPress={e => {
@@ -231,7 +235,7 @@ export default class SpotPicker extends Component {
                         desLatitude: e.nativeEvent.coordinate.latitude,
                         desLongitude: e.nativeEvent.coordinate.longitude
                       });
-                      console.log(e.nativeEvent.coordinate);
+                      // console.log(e.nativeEvent.coordinate);
                       this._panel.show(210);
                     }}
                   />
@@ -246,10 +250,9 @@ export default class SpotPicker extends Component {
 
                 return (
                   <Marker
-                  
-                  title={hereloc.title}
-                  description={"Govt. Parking"}
-                    pinColor={'#008b8b'}
+                    title={hereloc.title}
+                    description={"Govt. Parking"}
+                    pinColor={"#008b8b"}
                     key={index}
                     coordinate={herecoords}
                     onPress={e => {
@@ -257,7 +260,7 @@ export default class SpotPicker extends Component {
                         desLatitude: e.nativeEvent.coordinate.latitude,
                         desLongitude: e.nativeEvent.coordinate.longitude
                       });
-                      console.log(e.nativeEvent.coordinate);
+                      // console.log(e.nativeEvent.coordinate);
                       this._panel.show(210);
                     }}
                   />
@@ -296,7 +299,7 @@ export default class SpotPicker extends Component {
                       iconRight
                       large
                       title="Get Directions"
-                      color="black"
+                      buttonStyle={styles.Button}
                       onPress={this.handlePress}
                     />
                   </Animated.View>
@@ -320,3 +323,7 @@ export default class SpotPicker extends Component {
     );
   }
 }
+
+SpotPicker.navigationOptions = {
+  headerTitle: "Select marker"
+};

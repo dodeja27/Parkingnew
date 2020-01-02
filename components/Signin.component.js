@@ -5,7 +5,6 @@ import {
   View,
   Button,
   KeyboardAvoidingView,
-  ScrollView,
   Dimensions,
   TextInput,
   AsyncStorage
@@ -37,7 +36,7 @@ export default class Signin extends Component {
       axios
         .post("https://first-hrk-app.herokuapp.com/users/auth", credentials)
         .then(async res => {
-          console.log(res.data[0]);
+          // console.log(res.data[0]);
           if (res.data[0]) {
             
             // console.log("great going");
@@ -55,7 +54,7 @@ export default class Signin extends Component {
               isloggedin: false,
               wrongcredentials: "Invalid email or password. please try again"
             });
-            console.log("incorrect details try again");
+            // console.log("incorrect details try again");
           }
         })
         .catch(function(error) {

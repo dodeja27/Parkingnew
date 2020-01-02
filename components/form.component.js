@@ -8,7 +8,6 @@ import {
   Dimensions,
   Button,
   ScrollView,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Keyboard
 } from "react-native";
@@ -60,7 +59,7 @@ export default class RegistrationForm extends Component {
           axios
             .post("https://first-hrk-app.herokuapp.com/users/add", details)
             .then(res => {
-              console.log(res.data);
+              // console.log(res.data);
               if (res.data === "user already exists") {
                 // console.log("great going");
                 Alert.alert(

@@ -40,15 +40,16 @@ export default class SpotRegistration extends Component {
     this.verifyPermissions()
       .then(data => {
         if (data === false) {
-          console.log("you are going back");
+          this.props.navigation.goBack();
+          // console.log("you are going back");
         } else {
-          console.log("it is true");
+          this.location()
+      .then(data => console.log("working"))
+      .catch(err => console.log(err));
         }
       })
       .catch(err => console.log(err));
-    this.location()
-      .then(data => console.log("working"))
-      .catch(err => console.log(err));
+    
   }
 
   async verifyPermissions() {
@@ -85,7 +86,7 @@ export default class SpotRegistration extends Component {
           fetching: true
         });
       }
-      console.log(location);
+      // console.log(location);
     } catch (err) {
       Alert.alert(
         "Could not fetch location!",
@@ -106,7 +107,7 @@ export default class SpotRegistration extends Component {
       latitude: this.state.mapRegion.latitude,
       longitude: this.state.mapRegion.longitude
     };
-    console.log(spotinformation);
+    // console.log(spotinformation);
     axios
       .post("https://first-hrk-app.herokuapp.com/spots/add", spotinformation)
       .then(res => {
@@ -166,8 +167,8 @@ export default class SpotRegistration extends Component {
                       longitudeDelta: region.longitudeDelta
                     }
                   });
-                  console.log(region);
-                  console.log("here"); //call fuction here for placepicker
+                  // console.log(region);
+                  // console.log("here"); //call fuction here for placepicker
                   this.PlacePicker();
                 }}
                 toolbarEnabled={true}

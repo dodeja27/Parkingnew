@@ -23,12 +23,10 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.nit.park_here",
-      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android":{
-      "package": "com.nit.park_here",
+      "package": "com.dodeja.park_here",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/parking.png",
