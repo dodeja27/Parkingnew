@@ -9,8 +9,12 @@ import {
   Button,
   ScrollView,
   KeyboardAvoidingView,
-  Keyboard
+  Keyboard,
+  TouchableOpacity
+  
 } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
+
 import { Formik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
@@ -35,6 +39,7 @@ const validationSchema = yup.object().shape({
   contact: yup
     .string()
     .min(10, "please enter a valid contact number")
+    .max(10)
     .label("contact")
     .required()
 });
@@ -42,6 +47,9 @@ export default class RegistrationForm extends Component {
   constructor(props) {
     super(props);
     // console.log(props);
+    this.state = {          
+      isloggedin: false
+    };
   }
   render() {
     return (
@@ -56,18 +64,28 @@ export default class RegistrationForm extends Component {
           };
           // console.log("worked");
           // this.props.navigation.navigate({ routeName: "dashboard" });
+          this.setState({
+            isloggedin: true
+          });
           axios
             .post("https://first-hrk-app.herokuapp.com/users/add", details)
             .then(res => {
               // console.log(res.data);
+              
               if (res.data === "user already exists") {
                 // console.log("great going");
+                this.setState({
+                  isloggedin: false
+                });
                 Alert.alert(
                   "User exists!",
                   "This Email has been already Registered ",
                   [{ text: "Okay" }]
                 );
               } else {
+                this.setState({
+                  isloggedin: false
+                });
                 this.props.navigation.navigate("App");
                 // console.log("something went wrong !");
               }
@@ -88,6 +106,23 @@ export default class RegistrationForm extends Component {
             >
               <ScrollView style={{ flex: 1 }}>
                 <View style={style.container}>
+                {this.state.isloggedin ? (
+            <View style={{ flex: 1 }}>
+              <Spinner
+                visible={true}
+                textContent={"Loading..."}
+                textStyle={style.spinnerTextStyle}
+              />
+            </View>
+          ) : (
+            <View style={{ flex: 1 }}>
+              <Spinner
+                visible={false}
+                textContent={"Loading..."}
+                textStyle={style.spinnerTextStyle}
+              />
+            </View>
+          )}
                   <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
                     <Text style={{ marginBottom: 3 }}>Name</Text>
                     <TextInput
@@ -123,6 +158,7 @@ export default class RegistrationForm extends Component {
                       onChangeText={props.handleChange("email")}
                       onBlur={props.handleBlur("email")}
                       value={props.values.email}
+                      autoCapitalize={"none"}
                     />
                     <Text style={{ color: "red" }}>
                       {props.touched.email && props.errors.email}
@@ -162,13 +198,16 @@ export default class RegistrationForm extends Component {
                       onChangeText={props.handleChange("contact")}
                       onBlur={props.handleBlur("contact")}
                       value={props.values.contact}
+                      keyboardType={"numeric"}
                     />
                     <Text style={{ color: "red" }}>
                       {props.touched.contact && props.errors.contact}
                     </Text>
                   </View>
-
+                      
                   <Button title="Submit" color="black" onPress={props.handleSubmit} />
+                      
+                        
                 </View>
               </ScrollView>
             </KeyboardAvoidingView>

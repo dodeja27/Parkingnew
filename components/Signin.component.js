@@ -112,9 +112,10 @@ export default class Signin extends Component {
               this.secondTextInput.focus();
             }}
             blurOnSubmit={false}
+            autoCapitalize={"none"}
             keyboardType="email-address"
             />
-          {/* <Text style={{ padding: 10 }}>password</Text> */}
+          {/* <Text style={{ padding: 10 }}>password</Text> */ }
             </View>
             <View style={{marginVertical: 10 }}>
 
